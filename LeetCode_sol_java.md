@@ -1,6 +1,6 @@
-# Learning Coding: Solutions for LeetCode using Java  
+# Struggling for LeetCode Java Solution  
   
->我变秃了，也变强了。
+>来个Offer吧！秋梨膏！
 
 ## Binary Search
 [low, high)

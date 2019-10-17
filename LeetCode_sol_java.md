@@ -161,6 +161,91 @@ class Solution {
     }
 }
 ```
+### [141](https://leetcode.com/problems/linked-list-cycle/). Linked List Cycle (Easy)
+Oct.16,2019
+```java
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+### [142](https://leetcode.com/problems/linked-list-cycle-ii/). Linked List Cycle II (Medium)
+Oct.16, 2019  
+> Runtime: 0 ms, faster than 100.00% of Java online submissions for Linked List Cycle II.  
+> Memory Usage: 34.1 MB, less than 95.79% of Java online submissions for Linked List Cycle II.  
+```java
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        ListNode hare = hasCycle(head);
+        if (hare == null) {
+            return null;
+        }
+        // let r be the length of the circle
+        // fast ptr walks n*r in the circle when it meets slow ptr
+        // let f be the length before go into the circle
+        // let c be the length slow ptr walks in the cirle
+        // 2 * (f + c) = f + n * r + c
+        // so, f = n * r - c
+        ListNode tortoise = head;
+        while (tortoise != hare) {
+            tortoise = tortoise.next;
+            hare = hare.next;
+        }
+        return tortoise;
+    }
+    
+    private ListNode hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                return fast;
+            }
+        }
+        return null;
+    }
+}
+```
 ## Greedy
 
 ### 218. Skyline Problem  

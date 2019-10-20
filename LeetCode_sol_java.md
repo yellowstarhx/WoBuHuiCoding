@@ -1,4 +1,4 @@
-# Struggling for LeetCode Java Solution  
+# Struggling for LeetCode (Java Solution)  
   
 >来个Offer吧！秋梨膏！
 
@@ -582,7 +582,61 @@ class MyLinkedList {
  * obj.deleteAtIndex(index);
  */
 ```
-
+  
+## Search
+DFS, BFS
+### [529](https://leetcode.com/problems/minesweeper/). Minesweeper (Medium)
+Oct 20, 2019
+>Runtime: 1 ms, faster than 85.93% of Java online submissions for Minesweeper.  
+>Memory Usage: 38.4 MB, less than 100.00% of Java online submissions for Minesweeper.  
+```java
+class Solution {
+    public char[][] updateBoard(char[][] board, int[] click) {
+        if (board[click[0]][click[1]] == 'M') {
+            board[click[0]][click[1]] = 'X';
+        } else {
+            dfs(board, click);
+        }
+        return board;
+    }
+    
+    private void dfs(char[][] board, int[] click) {
+        int x = click[0], y = click[1];
+        int n = board.length, m = board[0].length;
+        int mines = 0;
+        int[] dx = {-1, 0, 1};
+        int[] dy = {-1, 0, 1};
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int nx = x + dx[i];
+                int ny = y + dy[j];
+                if ( nx >= 0 && nx < n && ny >= 0 && ny < m && !(dx[i] == 0 && dy[j] == 0)) {
+                    if (board[nx][ny] == 'M') {
+                        mines++;
+                    }
+                }
+            }
+        }
+        if (mines == 0) {
+            board[x][y] = 'B';
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    int nx = x + dx[i];
+                    int ny = y + dy[j];
+                    if ( nx >= 0 && nx < n && ny >= 0 && ny < m && !(dx[i] == 0 && dy[j] == 0)) {
+                        if (board[nx][ny] == 'E') {
+                            dfs(board, new int[]{nx, ny});
+                        }
+                    }
+                }
+            }
+        } else {
+            board[x][y] = (char)('0' + mines);
+        }
+    }
+}
+```
+  
 ## Greedy
 
 ### 218. Skyline Problem  

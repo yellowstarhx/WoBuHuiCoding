@@ -246,6 +246,343 @@ public class Solution {
     }
 }
 ```
+### [21](https://leetcode.com/problems/merge-two-sorted-lists/) Merge Two Sorted Lists (easy)
+Oct 18, 2019
+> Runtime: 0 ms, faster than 100.00% of Java online submissions for Merge Two Sorted Lists.  
+>Memory Usage: 40.6 MB, less than 13.13% of Java online submissions for Merge Two Sorted Lists.  
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode prev = dummy;
+        while (l1 != null && l2 != null) {
+            ListNode min = null;
+            if (l1.val <= l2.val) {
+                min = l1;
+                l1 = l1.next;
+            } else {
+                min = l2;
+                l2 = l2.next;
+            }
+            prev.next = min;
+            prev = prev.next;
+        }
+        prev.next = l1 == null ? l2 : l1;
+        return dummy.next;
+    }
+}
+```
+### [23](https://leetcode.com/problems/merge-k-sorted-lists/) Merge k Sorted Lists (hard)
+Oct 18, 2019 PriorityQueue Sol
+>Runtime: 5 ms, faster than 75.88% of Java online submissions for Merge k Sorted Lists.  
+>Memory Usage: 41.4 MB, less than 42.08% of Java online submissions for Merge k Sorted Lists.  
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        } else if (lists.length == 1) {
+            return lists[0];
+        }
+        
+        PriorityQueue<ListNode> heap = new PriorityQueue<>(lists.length, new Comparator<ListNode>(){
+            @Override
+            public int compare(ListNode o1, ListNode o2) {
+                return o1.val <= o2.val ? -1 : 1;
+            }
+        });
+        
+        for (int i = 0; i < lists.length; i++) {
+            // lists[i] could be null, like [[]] or [[],[]]
+            if (lists[i] != null) {
+                heap.offer(lists[i]);
+            }
+        }
+        
+        ListNode dummy = new ListNode(0);
+        ListNode prev = dummy;
+        while(!heap.isEmpty()) {
+            ListNode min = heap.poll();
+            prev.next = min;
+            if (min.next != null) {
+                heap.offer(min.next);
+            }
+            prev = min;
+        }
+        
+        return dummy.next;
+    }
+}
+```
+### [147](https://leetcode.com/problems/insertion-sort-list/) Insertion Sort List (Medium)
+Oct 18, 2018
+>Runtime: 28 ms, faster than 70.89% of Java online submissions for Insertion Sort List.  
+>Memory Usage: 35.9 MB, less than 100.00% of Java online submissions for Insertion Sort List.  
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        ListNode sorted = null;
+        while (head != null) {
+            ListNode next = head.next;
+            sorted = insert(sorted, head);
+            head = next;
+        }
+        return sorted;
+    }
+    
+    private ListNode insert(ListNode head, ListNode node) {
+        node.next = null;
+        if (head == null || head.val >= node.val) {
+            node.next = head;
+            head = node;
+            return head;
+        }
+        ListNode prev = head;
+        ListNode cur = head;
+        while (cur != null && cur.val < node.val) {
+            prev = cur;
+            cur = cur.next;
+        }
+        prev.next = node;
+        node.next = cur;
+        return head;
+    }
+}
+```
+### [148](https://leetcode.com/problems/sort-list/) Sort List (Medium)
+Oct 19, 2019
+>Runtime: 4 ms, faster than 62.67% of Java online submissions for Sort List.  
+>Memory Usage: 40.5 MB, less than 71.93% of Java online submissions for Sort List.  
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode secondHalf = cutList(head);
+        head = sortList(head);
+        secondHalf = sortList(secondHalf);
+        return merge(head, secondHalf);
+    }
+    
+    private ListNode cutList(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode next = slow.next;
+        slow.next = null;
+        return next;
+    }
+    
+    private ListNode merge(ListNode h1, ListNode h2) {
+        if (h1 == null || h2 == null) {
+            return h1 == null ? h2 : h1;
+        }
+        ListNode dummy = new ListNode(0);
+        ListNode cur = dummy;
+        while (h1 != null && h2 != null) {
+            if (h1.val <= h2.val) {
+                cur.next = h1;
+                h1 = h1.next;
+            } else {
+                cur.next = h2;
+                h2 = h2.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = h1 == null ? h2 : h1;
+        return dummy.next;
+    }
+}
+```
+### [707](https://leetcode.com/problems/design-linked-list/) Design LinkedList (Medium)
+Oct 19, 2019
+>Runtime: 51 ms, faster than 84.79% of Java online submissions for Design Linked List.  
+>Memory Usage: 45.3 MB, less than 88.89% of Java online submissions for Design Linked List.  
+```java
+class MyLinkedList {
+    private class ListNode{
+        int val;
+        ListNode prev;
+        ListNode next;
+        ListNode(int x) {
+            val = x;
+        }
+    }
+    
+    private ListNode head;
+    private ListNode tail;
+    private int size;
+
+    /** Initialize your data structure here. */
+    public MyLinkedList() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+    
+    /** Get the value of the index-th node in the linked list. If the index is invalid, return -1. */
+    public int get(int index) {
+        if (index < 0 || index >= size) {
+            return -1;
+        }
+        ListNode target = null;
+        if (index <= size / 2) {
+            target = head;
+            for (int i = 0; i < index; i++) {
+                target = target.next;
+            }
+        } else {
+            target = tail;
+            for (int i = size - 1; i > index; i--) {
+                target = target.prev;
+            }
+        }
+        return target.val;
+    }
+    
+    /** Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list. */
+    public void addAtHead(int val) {
+        ListNode node = new ListNode(val);
+        node.next = head;
+        if (head != null) {
+            head.prev = node;
+        }
+        head = node;
+        size += 1;
+        if (tail == null) {
+            tail = node;
+        }
+    }
+    
+    /** Append a node of value val to the last element of the linked list. */
+    public void addAtTail(int val) {
+        ListNode node = new ListNode(val);
+        node.prev = tail;
+        if (tail != null) {
+            tail.next = node;
+        }
+        tail = node;
+        if (head == null) {
+            head = tail;
+        }
+        size += 1;
+    }
+    
+    /** Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted. */
+    public void addAtIndex(int index, int val) {
+        if (index <= 0) {
+            addAtHead(val);
+            return;
+        } else if (index == size) {
+            addAtTail(val);
+            return;
+        } else if (index > size) {
+            return;
+        }
+        ListNode target = head;
+        if (index < size / 2) {
+            for (int i = 0; i < index; i++) {
+                target = target.next;
+            }
+        } else {
+            target = tail;
+            for (int i = size - 1; i > index; i--) {
+                target = target.prev;
+            }
+        }
+        ListNode node = new ListNode(val);
+        node.next = target;
+        node.prev = target.prev;
+        target.prev.next = node;
+        target.prev = node;
+        size++;
+    }
+    
+    /** Delete the index-th node in the linked list, if the index is valid. */
+    public void deleteAtIndex(int index) {
+        if (index >= 0 && index < size) {
+            ListNode target = head;
+            if (index < size / 2) {
+                for (int i = 0; i < index; i++) {
+                    target = target.next;
+                }
+            } else {
+                target = tail;
+                for (int i = size - 1; i > index; i--) {
+                    target = target.prev;
+                }
+            }
+            if (target != head) {
+                target.prev.next = target.next;
+            } else {
+                head = target.next;
+                if (head != null) {
+                    head.prev = null;
+                }
+            }
+            if (target != tail) {
+                target.next.prev = target.prev;
+            } else {
+                tail = target.prev;
+                if (tail != null) {
+                    tail.next = null;
+                }
+            }
+            size--;
+        }
+    }
+}
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList obj = new MyLinkedList();
+ * int param_1 = obj.get(index);
+ * obj.addAtHead(val);
+ * obj.addAtTail(val);
+ * obj.addAtIndex(index,val);
+ * obj.deleteAtIndex(index);
+ */
+```
+
 ## Greedy
 
 ### 218. Skyline Problem  

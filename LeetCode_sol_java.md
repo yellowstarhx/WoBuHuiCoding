@@ -643,3 +643,92 @@ class Solution {
 Oct 14, 2019 扫描线
 ```java
 ```
+
+## Two pointers
+
+### [11](https://leetcode.com/problems/container-with-most-water/). Container With Most Water (Medium)
+Oct 23, 2019 O(n)
+>Runtime: 2 ms, faster than 95.10% of Java online submissions for Container With Most Water.  
+>Memory Usage: 39.8 MB, less than 95.51% of Java online submissions for Container With Most Water.  
+```java
+class Solution {
+    public int maxArea(int[] height) {
+        int ans = 0;
+        int left = 0;
+        int right = height.length - 1;
+        while (left < right) {
+            ans = Math.max(ans, Math.min(height[left], height[right]) * (right - left));
+            // move the shorter line
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+### [167](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/). Two Sum II - Input array is sorted (Easy)
+Oct 23, 2019 O(n)
+>Runtime: 0 ms, faster than 100.00% of Java online submissions for Two Sum II - Input array is sorted.  
+>Memory Usage: 38.1 MB, less than 95.52% of Java online submissions for Two Sum II - Input array is sorted.  
+```java
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        int left = 0;
+        int right = numbers.length - 1;
+        while (left < right) {
+            if (numbers[left] + numbers[right] == target) {
+                return new int[]{left + 1, right + 1};
+            } else if (numbers[left] + numbers[right] < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return new int[]{-1, -1};
+    }
+}
+```
+
+### [977](https://leetcode.com/problems/squares-of-a-sorted-array/). Squares of a Sorted Array (Easy)
+Oct 23, 2019
+>Runtime: 1 ms, faster than 100.00% of Java online submissions for Squares of a Sorted Array.  
+>Memory Usage: 41 MB, less than 95.73% of Java online submissions for Squares of a Sorted Array.  
+```java
+class Solution {
+    public int[] sortedSquares(int[] A) {
+        int N = A.length;
+        int j = 0;
+        while (j < N && A[j] < 0) {
+            j++;
+        } 
+        int i = j - 1;
+        int[] ans = new int[N];
+        int idx = 0;
+        while (i >= 0 && j < N) {
+            if (-A[i] < A[j]) {
+                ans[idx] = A[i] * A[i];
+                i--;
+            } else {
+                ans[idx] = A[j] * A[j];
+                j++;
+            }
+            idx++;
+        }
+        while (i >= 0) {
+            ans[idx] = A[i] * A[i];
+            i--;
+            idx++;
+        }
+        while (j < N) {
+            ans[idx] = A[j] * A[j];
+            j++;
+            idx++;
+        }
+        return ans;
+    }
+}
+```

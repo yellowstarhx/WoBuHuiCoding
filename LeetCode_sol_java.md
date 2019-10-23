@@ -732,3 +732,41 @@ class Solution {
     }
 }
 ```
+
+## Recursion
+
+### [856](https://leetcode.com/problems/score-of-parentheses/). Score of Parentheses (Medium)
+Oct 23, 2019 O(n^2)
+>Runtime: 0 ms, faster than 100.00% of Java online submissions for Score of Parentheses.  
+>Memory Usage: 33.9 MB, less than 100.00% of Java online submissions for Score of Parentheses.  
+```java
+class Solution {
+    public int scoreOfParentheses(String S) {
+        if (S == null || S.length() == 0) {
+            return 0;
+        }
+        return helper(S, 0, S.length() - 1);
+    }
+    
+    private int helper(String S, int l, int r) {
+        if (l >= r) {
+            return 0;
+        }
+        if (r - l == 1) {
+            return 1;
+        }
+        int count = 0;
+        for (int i = l; i < r; i++) {
+            if (S.charAt(i) == '(') {
+                count++;
+            } else if (S.charAt(i) == ')') {
+                count--;
+            }
+            if (count == 0) {
+                return helper(S, l, i) + helper(S, i + 1, r);
+            }
+        }
+        return 2 * helper(S, l + 1, r - 1);
+    }
+}
+```

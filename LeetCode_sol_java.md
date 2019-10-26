@@ -770,3 +770,175 @@ class Solution {
     }
 }
 ```
+### [726](https://leetcode.com/problems/number-of-atoms/). Number of Atoms (hard)
+Oct 25, 2019 O(n)
+>Runtime: 4 ms, faster than 74.44% of Java online submissions for Number of Atoms.  
+>Memory Usage: 34.7 MB, less than 100.00% of Java online submissions for Number of Atoms.  
+```java
+class Solution {
+    private int idx = 0;
+    public String countOfAtoms(String formula) {
+        StringBuilder sb = new StringBuilder();
+        idx = 0;
+        Map<String, Integer> map = countOfAtoms(formula.toCharArray());
+        for (String name : map.keySet()) {
+            sb.append(name);
+            int count = map.get(name);
+            if (count > 1) {
+                sb.append(count);
+            }
+        }
+        return sb.toString();
+    }
+    
+    private Map<String, Integer> countOfAtoms(char[] arr) {
+        Map<String, Integer> map = new TreeMap<>();
+        while (idx < arr.length) {
+            if (arr[idx] == '(') {
+                idx++;
+                // recursion
+                Map<String, Integer> tmp = countOfAtoms(arr);
+                int factor = getNumber(arr);
+                for (Map.Entry<String, Integer> entry : tmp.entrySet()) {
+                    Integer count = map.get(entry.getKey());
+                    if (count == null) {
+                        count = 0;
+                    }
+                    map.put(entry.getKey(), count + factor * entry.getValue());
+                }
+            } else if (arr[idx] == ')') {
+                idx++;
+                return map;
+            } else {
+                String name = getName(arr);
+                map.put(name, map.getOrDefault(name, 0) + getNumber(arr));
+            }
+        }
+        return map;
+    }
+    
+    private String getName(char[] arr) {
+        String name = "" + arr[idx];
+        idx++;
+        while (idx < arr.length && arr[idx] >= 'a' && arr[idx] <= 'z') {
+            name += arr[idx];
+            idx++;
+        }
+        return name;
+    }
+    
+    private int getNumber(char[] arr) {
+        int res = 0;
+        while (idx < arr.length && arr[idx] >= '0' && arr[idx] <= '9') {
+            res = res * 10 + arr[idx] - '0';
+            idx++;
+        }
+        return res == 0 ? 1 : res;
+    }
+}
+```
+### [394](https://leetcode.com/problems/decode-string/). Decode String (Medium)
+Oct 25, 2019
+>Runtime: 0 ms, faster than 100.00% of Java online submissions for Decode String.  
+>Memory Usage: 34.3 MB, less than 100.00% of Java online submissions for Decode String.  
+```java
+class Solution {
+    private int idx = 0;
+    public String decodeString(String s) {
+        idx = 0;
+        return decodeSubString(s.toCharArray());
+    }
+    
+    private String decodeSubString(char[] arr) {
+        StringBuilder sb = new StringBuilder();
+        int factor = 1;
+        String tmp = null;
+        while (idx < arr.length) {
+            if (arr[idx] >= '0' && arr[idx] <= '9') {
+                factor = getNumber(arr);
+            } else if (arr[idx] == '[') {
+                idx++;
+                tmp = decodeSubString(arr);
+                for (int i = 0; i < factor; i++) {
+                    sb.append(tmp);
+                }
+            } else if (arr[idx] == ']') {
+                idx++;
+                return sb.toString();
+            } else {
+                sb.append(arr[idx]);
+                idx++;
+            }
+        }
+        return sb.toString();
+    }
+    
+    private int getNumber(char[] arr) {
+        int num = 0;
+        while (idx < arr.length && arr[idx] >= '0' && arr[idx] <= '9') {
+            num = num * 10 + arr[idx] - '0';
+            idx++;
+        }
+        return num;
+    }
+}
+```
+### [736](https://leetcode.com/problems/parse-lisp-expression/) Parse Lisp Expression (hard)
+Oct 25, 2019
+>
+```java
+
+```
+
+## Divide and Conquer
+### [169](https://leetcode.com/problems/majority-element/) Majority Element (Easy)
+Oct 25, 2019 This problem has multiple solutions
+Divide and Conquer - O(nlgn) ~ O(n)
+>Runtime: 1 ms, faster than 99.90% of Java online submissions for Majority Element.  
+>Memory Usage: 41.8 MB, less than 68.38% of Java online submissions for Majority Element.  
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        // divide & conquer sol
+        return majorityElement(nums, 0, nums.length - 1);
+    }
+    
+    private int majorityElement(int[] nums, int left, int right) {
+        // base case
+        if (left == right) {
+            return nums[left];
+        }
+        // recursive rule
+        int mid = (right - left) / 2 + left;
+        int leftNum = majorityElement(nums, left, mid);
+        int rightNum = majorityElement(nums, mid + 1, right);
+        
+        // both agree
+        if (leftNum == rightNum) {
+            return leftNum;
+        }
+        
+        // return winner
+        int leftCount = countInRange(nums, leftNum, left, right);
+        int rightCount = countInRange(nums, rightNum, left, right);
+        
+        return leftCount > rightCount ? leftNum : rightNum;
+    }
+    
+    private int countInRange(int[] nums, int target, int l, int r) {
+        int count = 0;
+        for (int i = l; i <= r; i++) {
+            if (nums[i] == target) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+```
+### [315](https://leetcode.com/problems/count-of-smaller-numbers-after-self/). Count of Smaller Numbers After Self (hard)
+Oct 25, 2019
+>
+```java
+
+```

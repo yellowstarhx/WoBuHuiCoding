@@ -583,6 +583,35 @@ class MyLinkedList {
  */
 ```
   
+## Tree
+### [255](https://leetcode.com/problems/verify-preorder-sequence-in-binary-search-tree/). Verify Preorder (Medium)
+Oct 26, 2019
+>Runtime: 2 ms, faster than 96.57% of Java online submissions for Verify Preorder Sequence in Binary Search Tree.  
+>Memory Usage: 39.1 MB, less than 100.00% of Java online submissions for Verify Preorder Sequence in Binary Search Tree.  
+```java
+class Solution {
+    private int idx = 0;
+    int[] tree = null;
+    public boolean verifyPreorder(int[] preorder) {
+        idx = 0;
+        tree = preorder;
+        return verifyPreorder(Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+    
+    private boolean verifyPreorder(int min, int max) {
+        if (idx == tree.length) {
+            return true;
+        }
+        int root = tree[idx];
+        if (root < min || root > max) {
+            return false;
+        }
+        idx++;
+        return verifyPreorder(min, root - 1) || verifyPreorder(root + 1, max);
+    }
+}
+```
+
 ## Search
 DFS, BFS
 ### [529](https://leetcode.com/problems/minesweeper/). Minesweeper (Medium)

@@ -973,6 +973,7 @@ Oct 25, 2019
 ```
   
 ## Stack
+4道单调栈的应用 Nov 1, 2019
 ### [1130](). Minimum Cost Tree From Leaf Values (Medium)
 Oct 29, 2019 O(n) [REF](https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/discuss/339959/One-Pass-O(N)-Time-and-Space)
 >Runtime: 1 ms, faster than 96.39% of Java online submissions for Minimum Cost Tree From Leaf Values.  
@@ -998,14 +999,90 @@ class Solution {
     }
 }
 ```
-  
-3道单调栈的应用
-### [503] ()
->
+### [496](https://leetcode.com/problems/next-greater-element-i/). Next Greater Element I (Easy)
+>Runtime: 3 ms, faster than 79.40% of Java online submissions for Next Greater Element I.  
+>Memory Usage: 37 MB, less than 100.00% of Java online submissions for Next Greater Element I.  
 ```java
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap<>();
+        Deque<Integer> stack = new LinkedList<>();
+        int[] res = new int[nums1.length];
+        for (int num : nums2) {
+            while (!stack.isEmpty() && num > stack.peekLast()) {
+                map.put(stack.pollLast(), num);
+            }
+            stack.offerLast(num);
+        }
+        while (!stack.isEmpty()) {
+            map.put(stack.pollLast(), -1);
+        }
+        for (int i = 0; i < res.length; i++) {
+            res[i] = map.get(nums1[i]);
+        }
+        return res;
+    }
+}
 ```
-  
-### [1019] ()
->
+### [503](https://leetcode.com/problems/next-greater-element-ii/). Next Greater Element II (Medium)
+>Runtime: 11 ms, faster than 87.71% of Java online submissions for Next Greater Element II.  
+>Memory Usage: 40.1 MB, less than 100.00% of Java online submissions for Next Greater Element II.  
 ```java
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+        Deque<Integer> stack = new LinkedList<>();
+        int n = nums.length;
+        int[] res = new int[n];
+        Arrays.fill(res, -1);
+        
+        for (int i = 0; i < n * 2; i++) {
+            while (!stack.isEmpty() && nums[i % n] > nums[stack.peekLast()]) {
+                res[stack.pollLast()] = nums[i % n]; 
+            }
+            stack.offer(i % n);
+        }
+        return res;
+    }
+}
+```
+### [1019](https://leetcode.com/problems/next-greater-node-in-linked-list/). Next Greater Node In Linked List (Medium)
+>Runtime: 26 ms, faster than 84.92% of Java online submissions for Next Greater Node In Linked List.  
+>Memory Usage: 40.2 MB, less than 97.30% of Java online submissions for Next Greater Node In Linked List.  
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int[] nextLargerNodes(ListNode head) {
+        Map<ListNode, Integer> map = new HashMap<>();
+        Deque<ListNode> stack = new LinkedList<>();
+        ListNode dummyHead = head;
+        int length = 0;
+        
+        while (head != null) {
+            length++;
+            while (!stack.isEmpty() && head.val > stack.peekLast().val) {
+                map.put(stack.pollLast(), head.val);
+            }
+            stack.offerLast(head);
+            head = head.next;
+        }
+        
+        int[] res = new int[length];
+        head = dummyHead;
+        for (int i = 0; i < length; i++) {
+            Integer value = map.get(head);
+            if (value != null) {
+                res[i] = value;
+            }
+            head = head.next;
+        }
+        return res;
+    }
+}
 ```

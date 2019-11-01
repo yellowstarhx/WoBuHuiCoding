@@ -971,3 +971,41 @@ Oct 25, 2019
 ```java
 
 ```
+  
+## Stack
+### [1130](). Minimum Cost Tree From Leaf Values (Medium)
+Oct 29, 2019 O(n) [REF](https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/discuss/339959/One-Pass-O(N)-Time-and-Space)
+>Runtime: 1 ms, faster than 96.39% of Java online submissions for Minimum Cost Tree From Leaf Values.  
+>Memory Usage: 34.5 MB, less than 100.00% of Java online submissions for Minimum Cost Tree From Leaf Values.  
+```java
+class Solution {
+    public int mctFromLeafValues(int[] arr) {
+        int res = 0;
+        Deque<Integer> stack = new LinkedList<>();
+        stack.offerLast(Integer.MAX_VALUE);
+        for (int e : arr) {
+            while (e > stack.peekLast()) {
+                int smaller = stack.pollLast();
+                res += smaller * Math.min(stack.peekLast(), e);
+            }
+            stack.offerLast(e);
+        }
+        while (stack.size() > 2) {
+            res += stack.pollLast() * stack.peekLast();
+        }
+        
+        return res;
+    }
+}
+```
+  
+3道单调栈的应用
+### [503] ()
+>
+```java
+```
+  
+### [1019] ()
+>
+```java
+```

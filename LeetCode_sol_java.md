@@ -6,7 +6,66 @@
 [low, high)  
 lowerBound  
 upperBound  
-
+### [4](https://leetcode.com/problems/median-of-two-sorted-arrays/). Median of Two Sorted Arrays (hard)
+Nov 3, 2019
+>Runtime: 2 ms, faster than 99.97% of Java online submissions for Median of Two Sorted Arrays.  
+>Memory Usage: 46.4 MB, less than 91.67% of Java online submissions for Median of Two Sorted Arrays.  
+```java
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        if (n1 == 0 && n2 == 0) {
+            return 0;
+        }
+        if (n1 == 0 || n2 == 0) {
+            return n1 == 0 ? findMedianSortedArray(nums2) : findMedianSortedArray(nums1);
+        }
+        // deal with the shorter array
+        if (n1 > n2) {
+            return findMedianSortedArrays(nums2, nums1);
+        }
+        int n = n1 + n2;
+        int m = (n + 1) / 2;
+        // contain m1 elements from arr1, m2 elements from arr 2
+        // m1 + m2 == m
+        int m1 = 0, m2 = 0;
+        // binary search to partition
+        int left = 0; int right = n1;
+        while (left < right) {
+            // 0 x 1 x ... x n1
+            m1 = (right - left) / 2 + left;
+            m2 = m - m1;
+            // stop condition: nums1[m1] > nums2[m2 - 1] && nums1[m1 - 1] < nums2[m2]
+            if (nums1[m1] < nums2[m2 - 1]) {
+                // should include more elements in arr1
+                left = m1 + 1;
+            } else {
+                right = m1;
+            }
+        }
+        m1 = left;
+        m2 = m - m1;
+        int c1 = m1 == 0 ? Integer.MIN_VALUE : nums1[m1 - 1];
+        int c2 = m2 == 0 ? Integer.MIN_VALUE : nums2[m2 - 1];
+        if (n % 2 == 1) {
+            return Math.max(c1, c2);
+        } else {
+            int c3 = m1 == n1 ? Integer.MAX_VALUE : nums1[m1];
+            int c4 = m2 == n2 ? Integer.MAX_VALUE : nums2[m2];
+            return (Math.max(c1, c2) + Math.min(c3, c4)) / 2.0;
+        }
+    }
+    
+    public double findMedianSortedArray(int[] nums) {
+        if (nums.length % 2 == 1) {
+            return nums[nums.length / 2];
+        } else {
+            return (nums[nums.length / 2] + nums[nums.length / 2 - 1]) / 2.0;
+        }
+    }
+}
+```
 ## List
 
 ### 2. Add two Numbers  

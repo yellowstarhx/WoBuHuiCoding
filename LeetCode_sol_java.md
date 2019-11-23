@@ -1145,3 +1145,64 @@ class Solution {
     }
 }
 ```
+## String
+### [556](https://leetcode.com/problems/next-greater-element-iii/). Next Greater Element III (Medium) 
+Nov. 22, 2019
+>Runtime: 0 ms, faster than 100.00% of Java online submissions for Next Greater Element III.  
+>Memory Usage: 32.9 MB, less than 10.00% of Java online submissions for Next Greater Element III.  
+```java
+package leetcode;
+
+import java.util.Arrays;
+
+public class NextGreaterElement {
+	
+    public int nextGreaterElementIII(int n) {
+        char[] arr = (n + "").toCharArray();
+        // step 1: start from right, find first digit smaller than its right
+        int i = arr.length - 2;
+        while (i >= 0) {
+            if (arr[i] < arr[i + 1]) {
+                break;
+            }
+            i--;
+        }
+        if (i < 0)
+            return -1;
+        // step 2: start from i, find minimum digit greater than arr[i]
+        int j = i + 1;
+        while (j + 1 < arr.length) {
+            if (arr[j] > arr[i] && arr[j + 1] <= arr[i]) 
+                break;
+            j++;
+        }
+        swap(arr, i, j);
+        // step 3 from i + 1 to the end, sort in increasing order
+        // reverse(arr, i + 1, j - 1);  // not reverse !
+        Arrays.sort(arr, i + 1, arr.length);
+        // be careful of overflow !
+        long val = Long.parseLong(new String(arr));
+        return val > Integer.MAX_VALUE ? -1 : (int)val;
+    }
+    
+    private void swap(char[] arr, int i, int j) {
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    public static void testIII(NextGreaterElement sol, int test) {
+    	System.out.println(test);
+		System.out.println(sol.nextGreaterElementIII(test));
+		System.out.println();
+    }
+
+	public static void main(String[] args) {
+		NextGreaterElement solution = new NextGreaterElement();
+		testIII(solution, 12443322);
+		testIII(solution, 1999999999);
+	}
+
+}
+
+```
